@@ -1,20 +1,24 @@
 import json
 
-with open("grid.txt", "r") as f:
-    data = f.read()
-    grid = json.loads(data)
 
-
-with open("exit.txt", "r") as f:
-    data = f.read()
+with open("instructions.txt", "r") as instructions_file:
+    data = instructions_file.read()
     instructions = json.loads(data)
 
 
-def moves():
-    x = grid["position"][0]
-    y = grid["position"][1]  
+exit = instructions["exit"]
+none = instructions["none"]
+explosion = instructions["explosion"]
+
+def moves(inst):
     
-    for i in instructions:
+    with open("grid.txt", "r") as grid_file:
+        data = grid_file.read()
+        grid = json.loads(data)
+    
+    for i in inst:
+        x = grid["position"][0]
+        y = grid["position"][1]   
           
         if i == "r":
             grid["dir"] += 1
@@ -30,18 +34,20 @@ def moves():
                 grid["position"] = [x, y - 1]
             if grid["dir"] == 3:
                 grid["position"] = [x - 1, y]
-            print(grid["position"])
                 
-    if grid["position"] == grid["mines"][0:-1]:
+    if grid["position"] in grid["mines"]:
         return "Turtle explosion"
         
     if grid["position"] == grid["exit"]:
         return "Turtle exit successful"
                 
-    if grid["position"] != grid["mines"][0:-1] and grid["position"] != grid["exit"][0]:
+    if grid["position"] not in grid["mines"] and grid["position"] != grid["exit"][0]:
         return "Turtle still in danger"
 
-print(moves())
+print(moves(explosion))
 
+print(moves(none))
+
+print(moves(exit))
         
         
