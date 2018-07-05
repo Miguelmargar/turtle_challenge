@@ -1,0 +1,1 @@
+{"exit": "rrmrrrmmrmrrrmmrrrmmrrrmrmrrrm", "none": "rrmrrrmmrm", "explosion": "rrmrrrmmrmrrrmmrrrmmm" }
