@@ -1,51 +1,74 @@
 class Grid():
     
     def __init__(self):
-        self.x = 0
-        self.y = 0
-        self.bx = 0
-        self.by = 0
-        self.sx = 0
-        self.sy = 0
-        self.ex = 0
-        self.ey = 0
         
         self.grid = {
-            "size": (self.x, self.y),
-            "bombs": (self.bx, self.by),
-            "start": (self.sx, self.sy),
-            "exit": (self.ex, self.ey)
+            "size": (0, 0),
+            "bombs": [],
+            "start": (0, 0),
+            "exit": (0, 0)
         }
         
     def set_size(self, x, y):
         self.x = x
         self.y = y
+        self.grid["size"] = (self.x, self.y)
+        
         
     def get_size(self):
-        return self.grid["size"]
+        print("The size of the maze is:", self.grid["size"])
     
-    def set_start(self, sx,sy):
-        if sx > x and sy > y:
+    
+    def set_start(self, sx, sy):
+        if sx > self.grid["size"][0] and sy > self.grid["size"][1]:
             print("invalid start as parameters given too big")
         else:
             self.sx = sx
             self.sy = sy
+            self.grid["start"] = (self.sx, self.sy)
+            
+    def get_start(self):
+        print("The start location is:", self.grid["start"])
+    
         
     def set_exit(self, ex, ey):
-        if ex > x and ey > y:
+        if ex > self.grid["size"][0] and ey > self.grid["size"][1]:
             print("invalid start as parameters given too big")
         else:
             self.ex = ex
             self.ey = ey
+            self.grid["exit"] = (self.ex, self.ey)
+            
+    def get_exit(self):
+        print("The exit is:", self.grid["exit"])
+    
         
-    def set_bombs(self, bx, by):
-        if bx > x and by > y:
+    def add_bombs(self, bx, by):
+        if bx > self.grid["size"][0] and by > self.grid["size"][1]:
             print("invalid start as parameters given too big")
         else:
             self.bx = bx
             self.by = by
-    
+            self.grid["bombs"].append((self.bx, self.by))
+            
+    def get_bombs(self):
+        print("the bombs are at:", self.grid["bombs"] )
+        
+    def remove_bombs(self, rx, ry):
+        self.rx = rx
+        self.ry = ry
+        if (self.rx, self.ry) not in self.grid["bombs"]:
+            print("The location specified has no bombs")
+        else:
+            self.grid["bombs"].remove((self.rx, self.ry))
+        
     
 a = Grid()
 a.set_size(8, 12)
-print(a.get_size())
+a.set_start(1,1)
+a.set_exit(8,11)
+a.add_bombs(2,3)
+a.add_bombs(4,9)
+a.remove_bombs(2,4)
+
+print(a.get_bombs())
