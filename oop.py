@@ -3,10 +3,10 @@ class Grid():
     def __init__(self):
         
         self.grid = {
-            "size": (0, 0),
+            "size": [0, 0],
             "bombs": [],
-            "start": (0, 0),
-            "exit": (0, 0)
+            "start": [0, 0],
+            "exit": [0, 0]
         }
         
     def set_size(self, x, y):
@@ -67,7 +67,7 @@ class Grid():
 class Turtle():
     
     def __init__(self):
-        self.location = (0, 0)
+        self.location = Grid().grid["start"]
         self.lives = 3
     
     
@@ -77,30 +77,30 @@ class Turtle():
         
     def move(self, order):
         self.order = order
-        
+
         if self.order == "up":
             if self.location[1] + 1 > Grid().grid["size"][1]:
                 print("Can not go up any more, you have reached the top of the board")
             else:
-                self.location = self.location[1] + 1
+                self.location[1] += 1
         
         if self.order == "down":
             if self.location[1] -1 < Grid().grid["size"][1]:
                 print("Can not go down any more, you have reached the bottom of the board")
             else:
-                self.location = self.location[1] - 1
+                self.location[1] -= 1
             
         elif self.order == "right":
             if self.location[0] + 1 > Grid().grid["size"][0]:
                 print("Can not go right any more, you have reached the end of the board")
             else:
-                self.location = self.location[0] + 1
+                self.location[0] += 1
             
         elif self.order == "left":
             if self.location[0] - 1 < Grid().grid["size"][0]:
                 print("Can not go left any more, you have reached the beggining of the board")
             else:
-                self.location = self.location[0] - 1
+                self.location[0] -= 1
     
             
     def check_bombs(self):
@@ -121,7 +121,7 @@ class Turtle():
         else:
             return False
             
-            
+
 
 
 def game():
@@ -161,10 +161,9 @@ def game():
     while a_turtle.lives > 0:
         
         order = input("Where do you want to go in the board? Options: up, down, left, right ")
-        a_turtle.move(order.lower())
+        a_turtle.move(order)
         if a_turtle.check_bombs():
             a_turtle.check_exit
         else:
             break
         
-game()
