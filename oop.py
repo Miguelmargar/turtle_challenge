@@ -66,8 +66,8 @@ class Grid():
 
 class Turtle():
     
-    def __init__(self):
-        self.location = Grid().grid["start"]
+    def __init__(self, obj):
+        self.location = obj.grid["start"]
         self.lives = 3
     
     
@@ -75,95 +75,101 @@ class Turtle():
         print("You are currently at:", self.location)
         
         
-    def move(self, order):
+    def move(self, order, obj):
         self.order = order
 
         if self.order == "up":
-            if self.location[1] + 1 > Grid().grid["size"][1]:
+            if self.location[1] + 1 > obj.grid["size"][1]:
                 print("Can not go up any more, you have reached the top of the board")
             else:
                 self.location[1] += 1
         
         if self.order == "down":
-            if self.location[1] -1 < Grid().grid["size"][1]:
+            if self.location[1] -1 < obj.grid["size"][1]:
                 print("Can not go down any more, you have reached the bottom of the board")
             else:
                 self.location[1] -= 1
             
         elif self.order == "right":
-            if self.location[0] + 1 > Grid().grid["size"][0]:
+            if self.location[0] + 1 > obj.grid["size"][0]:
                 print("Can not go right any more, you have reached the end of the board")
             else:
                 self.location[0] += 1
             
         elif self.order == "left":
-            if self.location[0] - 1 < Grid().grid["size"][0]:
+            if self.location[0] - 1 < obj.grid["size"][0]:
                 print("Can not go left any more, you have reached the beggining of the board")
             else:
                 self.location[0] -= 1
-    
+        print("Your new location is: ", self.get_location())
             
-    def check_bombs(self):
-        if self.location in Grid().grid["bombs"]:
+    def check_bombs(self, obj):
+        if self.location in obj.grid["bombs"]:
             print("YOU HAVE EXPLODED")
             self.lives -= 1
-            Grid().grid["bombs"].remove(self.location)
+            obj.grid["bombs"].remove(self.location)
             if self.lives == 0:
                 print("YOU HAVE NO MORE LIVES - GAME OVER")
                 return False
         else:
             return True
         
-    def check_exit(self):
-        if self.location == Grid().grid["exit"]:
+    def check_exit(self, obj):
+        if self.location == obj.grid["exit"]:
             print("SUCCESS YOU HAVE EXITED THE MAZE")
             return True
         else:
             return False
-            
-
+        
 
 
 def game():
     a_grid = Grid()
-    a_turtle = Turtle()
+    a_turtle = Turtle(a_grid)
 
         
     y = int(input("Please type the heigth of the board: "))
     x = int(input("Please type the lenght of the board "))
+    print()
     
     a_grid.set_size(x, y)
     
     b = int(input("How many bombs do you want to have: "))
+    print()
     
     bomb_count = 1
     while bomb_count <= b:
         print("Place bomb number", bomb_count)
         bx = int(input("place bomb \'bomb_count\' in x axis "))
         yx = int(input("place bomb \'bomb_count\' in y axis "))
+        print()
         a_grid.add_bombs(bx, yx)
         bomb_count += 1
         
-    print("Where do you want the exit to be:")
+    print("Where do you want the exit to be: ")
     
     ex = int(input("Exit coordinate for X axis: "))
     ey = int(input("Exit coordinate for Y axis: "))
+    print()
     
     a_grid.set_exit(ex, ey)
     
     print("Where do you want to start: ")
+    print()
     
     sx = int(input("Start coordinate for X axis "))
     sy = int(input("Start coordinate for Y axis"))
+    print()
     
     a_grid.set_start(sx, sy)
     
     while a_turtle.lives > 0:
         
         order = input("Where do you want to go in the board? Options: up, down, left, right ")
-        a_turtle.move(order)
-        if a_turtle.check_bombs():
+        a_turtle.move(order, a_grid)
+        if a_turtle.check_bombs(a_grid):
             a_turtle.check_exit
         else:
             break
         
+# game()
