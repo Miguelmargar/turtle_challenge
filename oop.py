@@ -49,7 +49,7 @@ class Grid():
         else:
             self.bx = bx
             self.by = by
-            self.grid["bombs"].append((self.bx, self.by))
+            self.grid["bombs"].append([self.bx, self.by])
             
     def remove_bombs(self, rx, ry):
         self.rx = rx
@@ -101,7 +101,7 @@ class Turtle():
                 print("Can not go left any more, you have reached the beggining of the board")
             else:
                 self.location[0] -= 1
-        print("Your new location is: ", self.get_location())
+        self.get_location()
             
     def check_bombs(self, obj):
         if self.location in obj.grid["bombs"]:
@@ -138,10 +138,11 @@ def game():
     print()
     
     bomb_count = 1
+    bc_str = str(bomb_count)
     while bomb_count <= b:
         print("Place bomb number", bomb_count)
-        bx = int(input("place bomb \'bomb_count\' in x axis "))
-        yx = int(input("place bomb \'bomb_count\' in y axis "))
+        bx = int(input("place bomb " + bc_str + " in x axis: "))
+        yx = int(input("place bomb " + bc_str + " in y axis: "))
         print()
         a_grid.add_bombs(bx, yx)
         bomb_count += 1
@@ -157,8 +158,8 @@ def game():
     print("Where do you want to start: ")
     print()
     
-    sx = int(input("Start coordinate for X axis "))
-    sy = int(input("Start coordinate for Y axis"))
+    sx = int(input("Start coordinate for X axis: "))
+    sy = int(input("Start coordinate for Y axis: "))
     print()
     
     a_grid.set_start(sx, sy)
@@ -167,9 +168,7 @@ def game():
         
         order = input("Where do you want to go in the board? Options: up, down, left, right ")
         a_turtle.move(order, a_grid)
-        if a_turtle.check_bombs(a_grid):
-            a_turtle.check_exit
-        else:
-            break
+        a_turtle.check_bombs(a_grid)
+        a_turtle.check_exit(a_grid)
         
-# game()
+game()
