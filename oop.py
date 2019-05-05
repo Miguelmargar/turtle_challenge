@@ -12,7 +12,7 @@ class Grid():
     def set_size(self, x, y):
         self.x = x
         self.y = y
-        self.grid["size"] = (self.x, self.y)
+        self.grid["size"] = [self.x, self.y]
         
         
     def get_size(self):
@@ -20,12 +20,14 @@ class Grid():
     
     
     def set_start(self, sx, sy):
-        if sx > self.grid["size"][0] and sy > self.grid["size"][1]:
+        
+        if sx > self.grid["size"][0] or sy > self.grid["size"][1]:
             print("invalid start as parameters given too big")
         else:
             self.sx = sx
             self.sy = sy
-            self.grid["start"] = (self.sx, self.sy)
+            self.grid["start"] = [self.sx, self.sy]
+      
             
     def get_start(self):
         print("The start location is:", self.grid["start"])
@@ -37,7 +39,7 @@ class Grid():
         else:
             self.ex = ex
             self.ey = ey
-            self.grid["exit"] = (self.ex, self.ey)
+            self.grid["exit"] = [self.ex, self.ey]
             
     def get_exit(self):
         print("The exit is:", self.grid["exit"])
@@ -67,6 +69,7 @@ class Grid():
 class Turtle():
     
     def __init__(self, obj):
+        self.obj = obj
         self.location = obj.grid["start"]
         self.lives = 3
     
@@ -75,57 +78,57 @@ class Turtle():
         print("You are currently at:", self.location)
         
         
-    def move(self, order, obj):
+    def move(self, order):
         self.order = order
 
         if self.order == "up":
-            if self.location[1] + 1 > obj.grid["size"][1]:
+            if self.location[1] + 1 > self.obj.grid["size"][1]:
                 print("Can not go up any more, you have reached the top of the board")
             else:
                 self.location[1] += 1
         
         if self.order == "down":
-            if self.location[1] -1 < obj.grid["size"][1]:
+            if self.location[1] -1 < self.obj.grid["size"][1]:
                 print("Can not go down any more, you have reached the bottom of the board")
             else:
                 self.location[1] -= 1
             
         elif self.order == "right":
-            if self.location[0] + 1 > obj.grid["size"][0]:
+            if self.location[0] + 1 > self.obj.grid["size"][0]:
                 print("Can not go right any more, you have reached the end of the board")
             else:
                 self.location[0] += 1
             
         elif self.order == "left":
-            if self.location[0] - 1 < obj.grid["size"][0]:
+            if self.location[0] - 1 < self.obj.grid["size"][0]:
                 print("Can not go left any more, you have reached the beggining of the board")
             else:
                 self.location[0] -= 1
         self.get_location()
             
-    def check_bombs(self, obj):
-        if self.location in obj.grid["bombs"]:
+    def check_bombs(self):
+        if self.location in self.obj.grid["bombs"]:
             print("YOU HAVE EXPLODED")
             self.lives -= 1
-            obj.grid["bombs"].remove(self.location)
+            self.obj.grid["bombs"].remove(self.location)
             if self.lives == 0:
                 print("YOU HAVE NO MORE LIVES - GAME OVER")
                 return False
         else:
             return True
         
-    def check_exit(self, obj):
-        if self.location == obj.grid["exit"]:
+    def check_exit(self):
+        if self.location == self.obj.grid["exit"]:
             print("SUCCESS YOU HAVE EXITED THE MAZE")
             return True
         else:
             return False
-        
+      
+
 
 
 def game():
     a_grid = Grid()
-    a_turtle = Turtle(a_grid)
 
         
     y = int(input("Please type the heigth of the board: "))
@@ -164,11 +167,13 @@ def game():
     
     a_grid.set_start(sx, sy)
     
-    while a_turtle.lives > 0:
+    a_turtle = Turtle(a_grid)
+    
+    while a_turtle.lives > 0 and a_turtle.check_exit() == False:
         
         order = input("Where do you want to go in the board? Options: up, down, left, right ")
-        a_turtle.move(order, a_grid)
-        a_turtle.check_bombs(a_grid)
-        a_turtle.check_exit(a_grid)
+        a_turtle.move(order)
+        a_turtle.check_bombs()
+        a_turtle.check_exit()
         
 game()
