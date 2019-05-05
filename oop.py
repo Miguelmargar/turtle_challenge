@@ -132,41 +132,48 @@ def game():
     
     while play:
     
-        # Intantiate grid
-        a_grid = Grid()
-    
-        # Set board size    
-        y = int(input("Please type the heigth of the board: "))
-        x = int(input("Please type the lenght of the board "))
-        print()
-        a_grid.set_size(x, y)
-     
-        # Place bombs
-        b = int(input("How many bombs do you want to have: "))
-        print()
-        bomb_count = 1
-        bc_str = str(bomb_count)
-        while bomb_count <= b:
-            print("Place bomb number:", bomb_count)
-            bx = int(input("place bomb " + bc_str + " in x axis: "))
-            yx = int(input("place bomb " + bc_str + " in y axis: "))
+        random = input("Do you want to randomise Grid locations? (yes/no): ")
+        
+        # Randomise grid settings    
+        if random == "yes":
+            pass
+        # Do not randomise grid settings
+        else:    
+            # Intantiate grid
+            a_grid = Grid()
+        
+            # Set board size    
+            y = int(input("Please type the heigth of the board: "))
+            x = int(input("Please type the lenght of the board "))
             print()
-            a_grid.add_bombs(bx, yx)
-            bomb_count += 1
-    
-        # Place the exit   
-        print("Where do you want the exit to be: ")
-        ex = int(input("Exit coordinate for X axis: "))
-        ey = int(input("Exit coordinate for Y axis: "))
-        print()
-        a_grid.set_exit(ex, ey)
-      
-        # Place start
-        print("Where do you want to start: ")
-        sx = int(input("Start coordinate for X axis: "))
-        sy = int(input("Start coordinate for Y axis: "))
-        print()
-        a_grid.set_start(sx, sy)
+            a_grid.set_size(x, y)
+         
+            # Place bombs
+            b = int(input("How many bombs do you want to have: "))
+            print()
+            bomb_count = 1
+            bc_str = str(bomb_count)
+            while bomb_count <= b:
+                print("Place bomb number:", bomb_count)
+                bx = int(input("place bomb " + bc_str + " in x axis: "))
+                yx = int(input("place bomb " + bc_str + " in y axis: "))
+                print()
+                a_grid.add_bombs(bx, yx)
+                bomb_count += 1
+        
+            # Place the exit   
+            print("Where do you want the exit to be: ")
+            ex = int(input("Exit coordinate for X axis: "))
+            ey = int(input("Exit coordinate for Y axis: "))
+            print()
+            a_grid.set_exit(ex, ey)
+          
+            # Place start
+            print("Where do you want to start: ")
+            sx = int(input("Start coordinate for X axis: "))
+            sy = int(input("Start coordinate for Y axis: "))
+            print()
+            a_grid.set_start(sx, sy)
     
         # Instantiate Turtle
         a_turtle = Turtle(a_grid)
@@ -181,9 +188,9 @@ def game():
                 print("SUCCESS YOU HAVE EXITED THE MAZE")
                 print()
         
-        check = input("Would you like to play again? (yes/no): ")
+        again = input("Would you like to play again? (yes/no): ")
         
-        if check == "yes":
+        if again == "yes":
             play = True
         else:
             print("Good bye!")
