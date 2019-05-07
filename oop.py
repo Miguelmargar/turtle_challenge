@@ -133,12 +133,16 @@ def game():
     play = True
     
     while play:
+        name = input("What's your name: ")
+        print()
     
-        random = input("Do you want to randomise Grid locations? (yes/no): ")
+        random = input(name + " Do you want to randomise Grid locations? (yes/no): ")
+        print()
         
         # Randomise grid settings    
         if random == "yes":
-            difficulty = input("Choose difficulty level (easy/hard): ")
+            difficulty = input("Choose difficulty level " + name + " (easy/hard): ")
+            print()
             if difficulty == "easy":
                 boardSizeMin = 3
                 boardSizeMax = 5
@@ -239,12 +243,12 @@ def game():
             a_turtle.move(order)
             a_turtle.check_bombs()
             if a_turtle.check_exit():
-                print("SUCCESS YOU HAVE EXITED THE MAZE")
+                print("SUCCESS YOU HAVE EXITED THE MAZE " + name.upper())
                 print()
         
         
         # Ask if play again
-        again = input("Would you like to play again? (yes/no): ")
+        again = input("Would you like to play again? " + name + " (yes/no): ")
         
         if again == "yes":
             play = True
