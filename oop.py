@@ -1,3 +1,5 @@
+from random import *
+
 class Grid():
     
     def __init__(self):
@@ -136,8 +138,80 @@ def game():
         
         # Randomise grid settings    
         if random == "yes":
-            pass
-        # Do not randomise grid settings
+            difficulty = input("Choose difficulty level (easy/hard): ")
+            if difficulty == "easy":
+                boardSizeMin = 3
+                boardSizeMax = 5
+                bomb_count_min = 1
+                bomb_count_max = 2
+
+            else:
+                boardSizeMin = 5
+                boardSizeMax = 10
+                bomb_count_min = 3
+                bomb_count_max = 7
+            
+            # Intantiate grid
+            a_grid = Grid()
+        
+            # Set grid size randomly
+            y = choice(range(boardSizeMin, boardSizeMax + 1))
+            x = choice(range(boardSizeMin, boardSizeMax + 1))
+            a_grid.set_size(x, y)
+            
+            # place random bombs
+            b = 1
+            bomb_count = choice(range(bomb_count_min, bomb_count_max))
+            while b > bomb_count:
+                bx = choice(range(boardSizeMax)) 
+                by = choice(range(boardSizeMax))
+                a_grid.add_bombs(bx, by)
+                b += 1
+                
+            # Get exit location
+            ex = choice(range(boardSizeMax))
+            ey = choice(range(boardSizeMax))
+            a_grid.set_exit(ex, ey)
+            # If exit has bomb get a new exit until exit doesn't have a bomb
+            while a_grid.set_exit(ex, ey) in a_grid.grid["bombs"]:
+                ex = choice(range(boardSizeMax))
+                ey = choice(range(boardSizeMax))
+                a_grid.set_exit(ex, ey)
+            
+            # Get start location
+            sx = choice(range(boardSizeMax))
+            sy = choice(range(boardSizeMax))
+            a_grid.set_start(sx, sy)
+            # If start has bomb get new start until it doesn't have a bomb
+            while a_grid.set_start(sx, sy) in a_grid.grid["bombs"]:
+                sx = choice(range(boardSizeMax))
+                sy = choice(range(boardSizeMax))
+                a_grid.set_start(sx, sy)
+            
+            # Instantiate Turtle
+            a_turtle = Turtle(a_grid)
+            
+            # Move turtle around the board
+            while a_turtle.lives > 0 and a_turtle.check_exit() == False:
+            
+                order = input("Where do you want to go in the board? Options: up, down, left, right ")
+                a_turtle.move(order)
+                a_turtle.check_bombs()
+                if a_turtle.check_exit():
+                    print("SUCCESS YOU HAVE EXITED THE MAZE")
+                    print()
+            
+            again = input("Would you like to play again? (yes/no): ")
+        
+            if again == "yes":
+                play = True
+            else:
+                print("Good bye!")
+                play = False
+        
+        
+        
+# Do not randomise grid settings--------------------------------------------------------------
         else:    
             # Intantiate grid
             a_grid = Grid()
@@ -156,9 +230,9 @@ def game():
             while bomb_count <= b:
                 print("Place bomb number:", bomb_count)
                 bx = int(input("place bomb " + bc_str + " in x axis: "))
-                yx = int(input("place bomb " + bc_str + " in y axis: "))
+                by = int(input("place bomb " + bc_str + " in y axis: "))
                 print()
-                a_grid.add_bombs(bx, yx)
+                a_grid.add_bombs(bx, by)
                 bomb_count += 1
         
             # Place the exit   
@@ -196,6 +270,5 @@ def game():
             print("Good bye!")
             play = False
     
- 
- 
+
 game()
