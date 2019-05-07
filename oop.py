@@ -90,7 +90,7 @@ class Turtle():
                 self.location[1] += 1
         
         if self.order == "down":
-            if self.location[1] -1 < self.obj.grid["size"][1]:
+            if self.location[1] -1 < 0:
                 print("Can not go down any more, you have reached the bottom of the board")
             else:
                 self.location[1] -= 1
@@ -102,7 +102,7 @@ class Turtle():
                 self.location[0] += 1
             
         elif self.order == "left":
-            if self.location[0] - 1 < self.obj.grid["size"][0]:
+            if self.location[0] - 1 < 0:
                 print("Can not go left any more, you have reached the beggining of the board")
             else:
                 self.location[0] -= 1
@@ -188,30 +188,8 @@ def game():
                 sy = choice(range(boardSizeMax))
                 a_grid.set_start(sx, sy)
             
-            # Instantiate Turtle
-            a_turtle = Turtle(a_grid)
-            
-            # Move turtle around the board
-            while a_turtle.lives > 0 and a_turtle.check_exit() == False:
-            
-                order = input("Where do you want to go in the board? Options: up, down, left, right ")
-                a_turtle.move(order)
-                a_turtle.check_bombs()
-                if a_turtle.check_exit():
-                    print("SUCCESS YOU HAVE EXITED THE MAZE")
-                    print()
-            
-            again = input("Would you like to play again? (yes/no): ")
         
-            if again == "yes":
-                play = True
-            else:
-                print("Good bye!")
-                play = False
-        
-        
-        
-# Do not randomise grid settings--------------------------------------------------------------
+        # Do not randomise grid settings--------------------------------------------------------------
         else:    
             # Intantiate grid
             a_grid = Grid()
@@ -249,6 +227,8 @@ def game():
             print()
             a_grid.set_start(sx, sy)
     
+    
+    
         # Instantiate Turtle
         a_turtle = Turtle(a_grid)
         
@@ -262,6 +242,8 @@ def game():
                 print("SUCCESS YOU HAVE EXITED THE MAZE")
                 print()
         
+        
+        # Ask if play again
         again = input("Would you like to play again? (yes/no): ")
         
         if again == "yes":
