@@ -50,7 +50,7 @@ class Grid():
             self.grid["size"] = [self.x, self.y]
         
         if self.random == "no":
-            self.x = int(input("Please type the lenght of the board "))
+            self.x = int(input("Please type the lenght of the board: "))
             self.y = int(input("Please type the heigth of the board: "))
             
             self.grid["size"] = [self.x, self.y]
@@ -81,7 +81,7 @@ class Grid():
                 # Check that start location given in not out of board
                 if (self.sx > self.grid["size"][0]) or (self.sy > self.grid["size"][1]):
                     print("Invalid start as parameters given too big")
-                elif ([self.sx, self.sy in self.grid["bombs"]]):     
+                elif ([self.sx, self.sy] in self.grid["bombs"]):     
                     print("Invalid start as parameters collide with a bomb")
                 else:
                     self.grid["start"] = [self.sx, self.sy]
