@@ -60,17 +60,34 @@ class Grid():
         print("The size of the maze is:", self.grid["size"])
     
     
-    def set_start(self, sx, sy, random):
+    def set_start(self):
         if self.random == "yes":
-            pass
+            big = False
+            while not big:
+                self.sx = choice(range(boardSizeMax))
+                self.sy = choice(range(boardSizeMax))
+                
+                # Check that start location given in not out of board
+                if (self.sx > self.grid["size"][0]) or (self.sy > self.grid["size"][1]) or ([self.sx, self.sy in self.grid["bombs"]]):
+                    continue
+                else:
+                    self.grid["start"] = [self.sx, self.sy]
+                    big = True
         
         if self.random =="no":
-            if sx > self.grid["size"][0] or sy > self.grid["size"][1]:
-                print("invalid start as parameters given too big")
-            else:
-                self.sx = sx
-                self.sy = sy
-                self.grid["start"] = [self.sx, self.sy]
+            big = False
+            while not big:
+                self.sx = int(input("Start coordinate for X axis: "))
+                self.sy = int(input("Start coordinate for Y axis: "))
+                
+                # Check that start location given in not out of board
+                if (self.sx > self.grid["size"][0]) or (self.sy > self.grid["size"][1]):
+                    print("Invalid start as parameters given too big")
+                elif ([self.sx, self.sy in self.grid["bombs"]]):     
+                    print("Invalid start as parameters collide with a bomb")
+                else:
+                    self.grid["start"] = [self.sx, self.sy]
+                    big = True
       
             
     def get_start(self):
@@ -202,6 +219,9 @@ def game():
         #         by = choice(range(boardSizeMax))
         #         a_grid.add_bombs(bx, by)
         #         b += 1
+        
+        
+        a_grid.get_start()
                 
         #     # Get exit location
         #     ex = choice(range(boardSizeMax))
@@ -212,16 +232,7 @@ def game():
         #         ex = choice(range(boardSizeMax))
         #         ey = choice(range(boardSizeMax))
         #         a_grid.set_exit(ex, ey)
-            
-        #     # Get start location
-        #     sx = choice(range(boardSizeMax))
-        #     sy = choice(range(boardSizeMax))
-        #     a_grid.set_start(sx, sy)
-        #     # If start has bomb get new start until it doesn't have a bomb
-        #     while a_grid.set_start(sx, sy) in a_grid.grid["bombs"]:
-        #         sx = choice(range(boardSizeMax))
-        #         sy = choice(range(boardSizeMax))
-        #         a_grid.set_start(sx, sy)
+
             
         #     a_grid.get_start()
         #     print()
@@ -229,14 +240,6 @@ def game():
         
         # # Do not randomise grid settings--------------------------------------------------------------
         # else:    
-        #     # Intantiate grid
-        #     a_grid = Grid()
-        
-        #     # Set board size    
-        #     y = 
-        #     x = 
-        #     print()
-        #     a_grid.set_size(x, y)
          
         #     # Place bombs
         #     b = int(input("How many bombs do you want to have: "))
@@ -258,14 +261,7 @@ def game():
         #     print()
         #     a_grid.set_exit(ex, ey)
           
-        #     # Place start
-        #     print("Where do you want to start: ")
-        #     sx = int(input("Start coordinate for X axis: "))
-        #     sy = int(input("Start coordinate for Y axis: "))
-        #     print()
-        #     a_grid.set_start(sx, sy)
     
-        #     a_grid.get_start()
     
         # # Instantiate Turtle
         # a_turtle = Turtle(a_grid)
