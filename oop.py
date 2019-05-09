@@ -62,17 +62,15 @@ class Grid():
     
     def set_start(self):
         if self.random == "yes":
-            big = False
-            while not big:
-                self.sx = choice(range(boardSizeMax))
-                self.sy = choice(range(boardSizeMax))
-                
-                # Check that start location given in not out of board
-                if (self.sx > self.grid["size"][0]) or (self.sy > self.grid["size"][1]) or ([self.sx, self.sy in self.grid["bombs"]]):
-                    continue
-                else:
-                    self.grid["start"] = [self.sx, self.sy]
-                    big = True
+            self.sx = choice(range(self.boardSizeMax))
+            self.sy = choice(range(self.boardSizeMax))
+
+            # Check that start location given in not out of board or has bomb in it
+            while (self.sx > self.grid["size"][0]) or (self.sy > self.grid["size"][1]) or ([self.sx, self.sy] in self.grid["bombs"]):
+                self.sx = choice(range(self.boardSizeMax))
+                self.sy = choice(range(self.boardSizeMax))
+            
+            self.grid["start"] = [self.sx, self.sy]
         
         if self.random =="no":
             big = False
@@ -221,6 +219,7 @@ def game():
         #         b += 1
         
         
+        a_grid.set_start()
         a_grid.get_start()
                 
         #     # Get exit location
