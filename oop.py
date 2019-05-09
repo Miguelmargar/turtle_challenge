@@ -11,49 +11,99 @@ class Grid():
             "exit": [0, 0]
         }
         
-    def set_size(self, x, y):
-        self.x = x
-        self.y = y
-        self.grid["size"] = [self.x, self.y]
+        self.random = "no"
+        
+        self.boardSizeMin = 0
+        self.boardSizeMax = 0
+        self.bomb_count_min = 0
+        self.bomb_count_max = 0
+        
+    def set_difficulty(self):
+        if self.random == "yes": 
+            self.difficulty = input("Choose difficulty level (easy/hard): ")
+            print()
+                
+            if self.difficulty == "easy":
+                self.boardSizeMin = 3
+                self.boardSizeMax = 5
+                self.bomb_count_min = 1
+                self.bomb_count_max = 2
+    
+            elif self.difficulty == "hard":
+                self.boardSizeMin = 5
+                self.boardSizeMax = 10
+                self.bomb_count_min = 3
+                self.bomb_count_max = 7
+        else:
+            pass
+
+        
+    def set_random(self):
+        self.random = input("Do you want to randomise Grid locations? (yes/no): ")
+        print()
+        
+    def set_size(self):
+        if self.random == "yes":
+            self.y = choice(range(self.boardSizeMin, self.boardSizeMax + 1))
+            self.x = choice(range(self.boardSizeMin, self.boardSizeMax + 1))    
+        
+            self.grid["size"] = [self.x, self.y]
+        
+        if self.random == "no":
+            self.x = int(input("Please type the lenght of the board "))
+            self.y = int(input("Please type the heigth of the board: "))
+            
+            self.grid["size"] = [self.x, self.y]
         
         
     def get_size(self):
         print("The size of the maze is:", self.grid["size"])
     
     
-    def set_start(self, sx, sy):
+    def set_start(self, sx, sy, random):
+        if self.random == "yes":
+            pass
         
-        if sx > self.grid["size"][0] or sy > self.grid["size"][1]:
-            print("invalid start as parameters given too big")
-        else:
-            self.sx = sx
-            self.sy = sy
-            self.grid["start"] = [self.sx, self.sy]
+        if self.random =="no":
+            if sx > self.grid["size"][0] or sy > self.grid["size"][1]:
+                print("invalid start as parameters given too big")
+            else:
+                self.sx = sx
+                self.sy = sy
+                self.grid["start"] = [self.sx, self.sy]
       
             
     def get_start(self):
         print("The start location is:", self.grid["start"])
     
         
-    def set_exit(self, ex, ey):
-        if ex > self.grid["size"][0] and ey > self.grid["size"][1]:
-            print("invalid start as parameters given too big")
-        else:
-            self.ex = ex
-            self.ey = ey
-            self.grid["exit"] = [self.ex, self.ey]
+    def set_exit(self, ex, ey, random):
+        if self.random == "yes":
+            pass
+        
+        if self.random =="no":
+            if ex > self.grid["size"][0] and ey > self.grid["size"][1]:
+                print("invalid start as parameters given too big")
+            else:
+                self.ex = ex
+                self.ey = ey
+                self.grid["exit"] = [self.ex, self.ey]
             
     def get_exit(self):
         print("The exit is:", self.grid["exit"])
     
         
-    def add_bombs(self, bx, by):
-        if bx > self.grid["size"][0] and by > self.grid["size"][1]:
-            print("invalid start as parameters given too big")
-        else:
-            self.bx = bx
-            self.by = by
-            self.grid["bombs"].append([self.bx, self.by])
+    def add_bombs(self, bx, by, random):
+        if random == "yes":
+            pass
+        
+        if randrange == "no":
+            if bx > self.grid["size"][0] and by > self.grid["size"][1]:
+                print("invalid start as parameters given too big")
+            else:
+                self.bx = bx
+                self.by = by
+                self.grid["bombs"].append([self.bx, self.by])
             
     def remove_bombs(self, rx, ry):
         self.rx = rx
@@ -133,128 +183,112 @@ def game():
     play = True
     
     while play:
-        name = input("What's your name: ")
-        print()
+        
+        # Intantiate grid
+        a_grid = Grid()
     
-        random = input(name + " Do you want to randomise Grid locations? (yes/no): ")
-        print()
-        
-        # Randomise grid settings    
-        if random == "yes":
-            difficulty = input("Choose difficulty level " + name + " (easy/hard): ")
-            print()
-            if difficulty == "easy":
-                boardSizeMin = 3
-                boardSizeMax = 5
-                bomb_count_min = 1
-                bomb_count_max = 2
-
-            else:
-                boardSizeMin = 5
-                boardSizeMax = 10
-                bomb_count_min = 3
-                bomb_count_max = 7
+        a_grid.set_random()
             
-            # Intantiate grid
-            a_grid = Grid()
-        
-            # Set grid size randomly
-            y = choice(range(boardSizeMin, boardSizeMax + 1))
-            x = choice(range(boardSizeMin, boardSizeMax + 1))
-            a_grid.set_size(x, y)
+        a_grid.set_difficulty()        
             
-            # place random bombs
-            b = 1
-            bomb_count = choice(range(bomb_count_min, bomb_count_max))
-            while b > bomb_count:
-                bx = choice(range(boardSizeMax)) 
-                by = choice(range(boardSizeMax))
-                a_grid.add_bombs(bx, by)
-                b += 1
+        a_grid.set_size()
+        a_grid.get_size()
+            
+        #     # place random bombs
+        #     b = 1
+        #     bomb_count = choice(range(bomb_count_min, bomb_count_max))
+        #     while b > bomb_count:
+        #         bx = choice(range(boardSizeMax)) 
+        #         by = choice(range(boardSizeMax))
+        #         a_grid.add_bombs(bx, by)
+        #         b += 1
                 
-            # Get exit location
-            ex = choice(range(boardSizeMax))
-            ey = choice(range(boardSizeMax))
-            a_grid.set_exit(ex, ey)
-            # If exit has bomb get a new exit until exit doesn't have a bomb
-            while a_grid.set_exit(ex, ey) in a_grid.grid["bombs"]:
-                ex = choice(range(boardSizeMax))
-                ey = choice(range(boardSizeMax))
-                a_grid.set_exit(ex, ey)
+        #     # Get exit location
+        #     ex = choice(range(boardSizeMax))
+        #     ey = choice(range(boardSizeMax))
+        #     a_grid.set_exit(ex, ey)
+        #     # If exit has bomb get a new exit until exit doesn't have a bomb
+        #     while a_grid.set_exit(ex, ey) in a_grid.grid["bombs"]:
+        #         ex = choice(range(boardSizeMax))
+        #         ey = choice(range(boardSizeMax))
+        #         a_grid.set_exit(ex, ey)
             
-            # Get start location
-            sx = choice(range(boardSizeMax))
-            sy = choice(range(boardSizeMax))
-            a_grid.set_start(sx, sy)
-            # If start has bomb get new start until it doesn't have a bomb
-            while a_grid.set_start(sx, sy) in a_grid.grid["bombs"]:
-                sx = choice(range(boardSizeMax))
-                sy = choice(range(boardSizeMax))
-                a_grid.set_start(sx, sy)
+        #     # Get start location
+        #     sx = choice(range(boardSizeMax))
+        #     sy = choice(range(boardSizeMax))
+        #     a_grid.set_start(sx, sy)
+        #     # If start has bomb get new start until it doesn't have a bomb
+        #     while a_grid.set_start(sx, sy) in a_grid.grid["bombs"]:
+        #         sx = choice(range(boardSizeMax))
+        #         sy = choice(range(boardSizeMax))
+        #         a_grid.set_start(sx, sy)
+            
+        #     a_grid.get_start()
+        #     print()
             
         
-        # Do not randomise grid settings--------------------------------------------------------------
-        else:    
-            # Intantiate grid
-            a_grid = Grid()
+        # # Do not randomise grid settings--------------------------------------------------------------
+        # else:    
+        #     # Intantiate grid
+        #     a_grid = Grid()
         
-            # Set board size    
-            y = int(input("Please type the heigth of the board: "))
-            x = int(input("Please type the lenght of the board "))
-            print()
-            a_grid.set_size(x, y)
+        #     # Set board size    
+        #     y = 
+        #     x = 
+        #     print()
+        #     a_grid.set_size(x, y)
          
-            # Place bombs
-            b = int(input("How many bombs do you want to have: "))
-            print()
-            bomb_count = 1
-            bc_str = str(bomb_count)
-            while bomb_count <= b:
-                print("Place bomb number:", bomb_count)
-                bx = int(input("place bomb " + bc_str + " in x axis: "))
-                by = int(input("place bomb " + bc_str + " in y axis: "))
-                print()
-                a_grid.add_bombs(bx, by)
-                bomb_count += 1
+        #     # Place bombs
+        #     b = int(input("How many bombs do you want to have: "))
+        #     print()
+        #     bomb_count = 1
+        #     bc_str = str(bomb_count)
+        #     while bomb_count <= b:
+        #         print("Place bomb number:", bomb_count)
+        #         bx = int(input("place bomb " + bc_str + " in x axis: "))
+        #         by = int(input("place bomb " + bc_str + " in y axis: "))
+        #         print()
+        #         a_grid.add_bombs(bx, by)
+        #         bomb_count += 1
         
-            # Place the exit   
-            print("Where do you want the exit to be: ")
-            ex = int(input("Exit coordinate for X axis: "))
-            ey = int(input("Exit coordinate for Y axis: "))
-            print()
-            a_grid.set_exit(ex, ey)
+        #     # Place the exit   
+        #     print("Where do you want the exit to be: ")
+        #     ex = int(input("Exit coordinate for X axis: "))
+        #     ey = int(input("Exit coordinate for Y axis: "))
+        #     print()
+        #     a_grid.set_exit(ex, ey)
           
-            # Place start
-            print("Where do you want to start: ")
-            sx = int(input("Start coordinate for X axis: "))
-            sy = int(input("Start coordinate for Y axis: "))
-            print()
-            a_grid.set_start(sx, sy)
+        #     # Place start
+        #     print("Where do you want to start: ")
+        #     sx = int(input("Start coordinate for X axis: "))
+        #     sy = int(input("Start coordinate for Y axis: "))
+        #     print()
+        #     a_grid.set_start(sx, sy)
     
+        #     a_grid.get_start()
     
-    
-        # Instantiate Turtle
-        a_turtle = Turtle(a_grid)
+        # # Instantiate Turtle
+        # a_turtle = Turtle(a_grid)
         
-        # Move turtle around the board
-        while a_turtle.lives > 0 and a_turtle.check_exit() == False:
+        # # Move turtle around the board
+        # while a_turtle.lives > 0 and a_turtle.check_exit() == False:
             
-            order = input("Where do you want to go in the board? Options: up, down, left, right ")
-            a_turtle.move(order)
-            a_turtle.check_bombs()
-            if a_turtle.check_exit():
-                print("SUCCESS YOU HAVE EXITED THE MAZE " + name.upper())
-                print()
+        #     order = input("Where do you want to go in the board? Options: up, down, left, right ")
+        #     a_turtle.move(order)
+        #     a_turtle.check_bombs()
+        #     if a_turtle.check_exit():
+        #         print("SUCCESS YOU HAVE EXITED THE MAZE ")
+        #         print()
         
         
-        # Ask if play again
-        again = input("Would you like to play again? " + name + " (yes/no): ")
+        # # Ask if play again
+        # again = input("Would you like to play again? (yes/no): ")
         
-        if again == "yes":
-            play = True
-        else:
-            print("Good bye!")
-            play = False
+        # if again == "yes":
+        #     play = True
+        # else:
+        #     print("Good bye!")
+        #     play = False
     
 
 game()
