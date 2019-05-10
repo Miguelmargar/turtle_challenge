@@ -103,22 +103,43 @@ class Grid():
                 self.ex = ex
                 self.ey = ey
                 self.grid["exit"] = [self.ex, self.ey]
+       
             
     def get_exit(self):
         print("The exit is:", self.grid["exit"])
     
         
-    def add_bombs(self, bx, by, random):
-        if random == "yes":
-            pass
-        
-        if randrange == "no":
-            if bx > self.grid["size"][0] and by > self.grid["size"][1]:
-                print("invalid start as parameters given too big")
-            else:
-                self.bx = bx
-                self.by = by
+    def add_bombs(self):
+        if self.random == "yes":
+            self.b = 1
+            self.bomb_count = choice(range(self.bomb_count_min, self.bomb_count_max))
+            while self.b < self.bomb_count:
+                self.bx = choice(range(self.boardSizeMax)) 
+                self.by = choice(range(self.boardSizeMax))
                 self.grid["bombs"].append([self.bx, self.by])
+                self.b += 1
+                
+        # if not random
+        if self.random == "no":
+            # ask user how many bombs
+            self.b = int(input("How many bombs do you want to have: "))
+            print()
+            self.bomb_count = 1
+            self.bc_str = str(self.bomb_count)
+            # put number of bombs selected by user
+            while self.bomb_count <= self.b:
+                print("Place bomb number:", self.bomb_count)
+                self.bx = int(input("place bomb " + self.bc_str + " in x axis: "))
+                self.by = int(input("place bomb " + self.bc_str + " in y axis: "))
+                print()
+                # if bomb location is not in grid ask for a new one else place
+                if self.bx > self.grid["size"][0] and self.by > self.grid["size"][1]:
+                    print("invalid start as parameters given too big")
+                    print()
+                else:
+                    self.grid["bombs"].append([self.bx, self.by])
+                    self.bomb_count += 1
+          
             
     def remove_bombs(self, rx, ry):
         self.rx = rx
@@ -128,8 +149,10 @@ class Grid():
         else:
             self.grid["bombs"].remove((self.rx, self.ry))
 
+
     def get_bombs(self):
         print("the bombs are at:", self.grid["bombs"] )
+        print()
 
 
 
@@ -209,15 +232,8 @@ def game():
         a_grid.set_size()
         a_grid.get_size()
             
-        #     # place random bombs
-        #     b = 1
-        #     bomb_count = choice(range(bomb_count_min, bomb_count_max))
-        #     while b > bomb_count:
-        #         bx = choice(range(boardSizeMax)) 
-        #         by = choice(range(boardSizeMax))
-        #         a_grid.add_bombs(bx, by)
-        #         b += 1
-        
+        a_grid.add_bombs()
+        a_grid.get_bombs()
         
         a_grid.set_start()
         a_grid.get_start()
@@ -240,18 +256,7 @@ def game():
         # # Do not randomise grid settings--------------------------------------------------------------
         # else:    
          
-        #     # Place bombs
-        #     b = int(input("How many bombs do you want to have: "))
-        #     print()
-        #     bomb_count = 1
-        #     bc_str = str(bomb_count)
-        #     while bomb_count <= b:
-        #         print("Place bomb number:", bomb_count)
-        #         bx = int(input("place bomb " + bc_str + " in x axis: "))
-        #         by = int(input("place bomb " + bc_str + " in y axis: "))
-        #         print()
-        #         a_grid.add_bombs(bx, by)
-        #         bomb_count += 1
+
         
         #     # Place the exit   
         #     print("Where do you want the exit to be: ")
