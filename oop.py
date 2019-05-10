@@ -251,7 +251,6 @@ def game():
             
         # Add the bombs    
         a_grid.add_bombs()
-        a_grid.get_bombs()
         
         # Set the start
         a_grid.set_start()
@@ -259,25 +258,20 @@ def game():
                 
         # Set the exit
         a_grid.set_exit()
-        a_grid.get_exit()
-
     
         # Instantiate Turtle
         a_turtle = Turtle(a_grid)
         
-        a_turtle.get_location()
         a_turtle.move()
-
-
         
-        # # Ask if play again
-        # again = input("Would you like to play again? (yes/no): ")
+        # Ask if play again
+        again = input("Would you like to play again? (yes/no): ")
         
-        # if again == "yes":
-        #     play = True
-        # else:
-        #     print("Good bye!")
-        #     play = False
+        if again == "yes":
+            play = True
+        else:
+            print("Good bye!")
+            play = False
     
 
 game()
