@@ -92,16 +92,24 @@ class Grid():
         print("The start location is:", self.grid["start"])
     
         
-    def set_exit(self, ex, ey, random):
+    def set_exit(self):
         if self.random == "yes":
-            pass
+            self.ex = choice(range(self.boardSizeMax))
+            self.ey = choice(range(self.boardSizeMax))
+            # If exit has bomb get a new exit until exit doesn't have a bomb or is not the start
+            while (self.ex, self.ey) in self.grid["bombs"] or (self.ex, self.ey) in self.grid["start"]:
+                self.ex = choice(range(self.boardSizeMax))
+                self.ey = choice(range(self.boardSizeMax))
+            self.grid["exit"] = [self.ex, self.ey]        
         
         if self.random =="no":
-            if ex > self.grid["size"][0] and ey > self.grid["size"][1]:
+            print("Where do you want the exit to be: ")
+            self.ex = int(input("Exit coordinate for X axis: "))
+            self.ey = int(input("Exit coordinate for Y axis: "))
+            print()
+            if self.ex > self.grid["size"][0] and self.ey > self.grid["size"][1]:
                 print("invalid start as parameters given too big")
             else:
-                self.ex = ex
-                self.ey = ey
                 self.grid["exit"] = [self.ex, self.ey]
        
             
@@ -152,7 +160,6 @@ class Grid():
 
     def get_bombs(self):
         print("the bombs are at:", self.grid["bombs"] )
-        print()
 
 
 
@@ -160,7 +167,7 @@ class Turtle():
     
     def __init__(self, obj):
         self.obj = obj
-        self.location = obj.grid["start"]
+        self.location = self.obj.grid["start"]
         self.lives = 3
     
     
@@ -168,33 +175,38 @@ class Turtle():
         print("You are currently at:", self.location)
         
         
-    def move(self, order):
-        self.order = order
-
-        if self.order == "up":
-            if self.location[1] + 1 > self.obj.grid["size"][1]:
-                print("Can not go up any more, you have reached the top of the board")
-            else:
-                self.location[1] += 1
+    def move(self):
+        while self.lives > 0 and self.check_exit() == False:
         
-        if self.order == "down":
-            if self.location[1] -1 < 0:
-                print("Can not go down any more, you have reached the bottom of the board")
-            else:
-                self.location[1] -= 1
+            self.order = input("Where do you want to go in the board? Options: up, down, left, right ")
+
+            if self.order == "up":
+                if self.location[1] + 1 > self.obj.grid["size"][1]:
+                    print("Can not go up any more, you have reached the top of the board")
+                else:
+                    self.location[1] += 1
             
-        elif self.order == "right":
-            if self.location[0] + 1 > self.obj.grid["size"][0]:
-                print("Can not go right any more, you have reached the end of the board")
-            else:
-                self.location[0] += 1
+            if self.order == "down":
+                if self.location[1] -1 < 0:
+                    print("Can not go down any more, you have reached the bottom of the board")
+                else:
+                    self.location[1] -= 1
+                
+            elif self.order == "right":
+                if self.location[0] + 1 > self.obj.grid["size"][0]:
+                    print("Can not go right any more, you have reached the end of the board")
+                else:
+                    self.location[0] += 1
+                
+            elif self.order == "left":
+                if self.location[0] - 1 < 0:
+                    print("Can not go left any more, you have reached the beggining of the board")
+                else:
+                    self.location[0] -= 1
             
-        elif self.order == "left":
-            if self.location[0] - 1 < 0:
-                print("Can not go left any more, you have reached the beggining of the board")
-            else:
-                self.location[0] -= 1
-        self.get_location()
+            self.check_bombs()
+            
+            self.get_location()
             
     def check_bombs(self):
         if self.location in self.obj.grid["bombs"]:
@@ -209,6 +221,8 @@ class Turtle():
         
     def check_exit(self):
         if self.location == self.obj.grid["exit"]:
+            print("SUCCESS YOU HAVE EXITED THE MAZE ")
+            print()
             return True
         else:
             return False
@@ -225,61 +239,36 @@ def game():
         # Intantiate grid
         a_grid = Grid()
     
+        # Set randomness
         a_grid.set_random()
             
+        # Set game difficulty
         a_grid.set_difficulty()        
             
+        # Set the size
         a_grid.set_size()
         a_grid.get_size()
             
+        # Add the bombs    
         a_grid.add_bombs()
         a_grid.get_bombs()
         
+        # Set the start
         a_grid.set_start()
         a_grid.get_start()
                 
-        #     # Get exit location
-        #     ex = choice(range(boardSizeMax))
-        #     ey = choice(range(boardSizeMax))
-        #     a_grid.set_exit(ex, ey)
-        #     # If exit has bomb get a new exit until exit doesn't have a bomb
-        #     while a_grid.set_exit(ex, ey) in a_grid.grid["bombs"]:
-        #         ex = choice(range(boardSizeMax))
-        #         ey = choice(range(boardSizeMax))
-        #         a_grid.set_exit(ex, ey)
+        # Set the exit
+        a_grid.set_exit()
+        a_grid.get_exit()
 
-            
-        #     a_grid.get_start()
-        #     print()
-            
+    
+        # Instantiate Turtle
+        a_turtle = Turtle(a_grid)
         
-        # # Do not randomise grid settings--------------------------------------------------------------
-        # else:    
-         
+        a_turtle.get_location()
+        a_turtle.move()
 
-        
-        #     # Place the exit   
-        #     print("Where do you want the exit to be: ")
-        #     ex = int(input("Exit coordinate for X axis: "))
-        #     ey = int(input("Exit coordinate for Y axis: "))
-        #     print()
-        #     a_grid.set_exit(ex, ey)
-          
-    
-    
-        # # Instantiate Turtle
-        # a_turtle = Turtle(a_grid)
-        
-        # # Move turtle around the board
-        # while a_turtle.lives > 0 and a_turtle.check_exit() == False:
-            
-        #     order = input("Where do you want to go in the board? Options: up, down, left, right ")
-        #     a_turtle.move(order)
-        #     a_turtle.check_bombs()
-        #     if a_turtle.check_exit():
-        #         print("SUCCESS YOU HAVE EXITED THE MAZE ")
-        #         print()
-        
+
         
         # # Ask if play again
         # again = input("Would you like to play again? (yes/no): ")
