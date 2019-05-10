@@ -1,4 +1,4 @@
-from random import *
+from random import choice
 
 class Grid():
     
@@ -62,13 +62,13 @@ class Grid():
     
     def set_start(self):
         if self.random == "yes":
-            self.sx = choice(range(self.boardSizeMax))
-            self.sy = choice(range(self.boardSizeMax))
+            self.sx = choice(range(self.x))
+            self.sy = choice(range(self.y))
 
             # Check that start location given in not out of board or has bomb in it
             while (self.sx > self.grid["size"][0]) or (self.sy > self.grid["size"][1]) or ([self.sx, self.sy] in self.grid["bombs"]):
-                self.sx = choice(range(self.boardSizeMax))
-                self.sy = choice(range(self.boardSizeMax))
+                self.sx = choice(range(self.x))
+                self.sy = choice(range(self.y))
             
             self.grid["start"] = [self.sx, self.sy]
         
@@ -94,12 +94,12 @@ class Grid():
         
     def set_exit(self):
         if self.random == "yes":
-            self.ex = choice(range(self.boardSizeMax))
-            self.ey = choice(range(self.boardSizeMax))
+            self.ex = choice(range(self.x))
+            self.ey = choice(range(self.y))
             # If exit has bomb get a new exit until exit doesn't have a bomb or is not the start
             while (self.ex, self.ey) in self.grid["bombs"] or (self.ex, self.ey) in self.grid["start"]:
-                self.ex = choice(range(self.boardSizeMax))
-                self.ey = choice(range(self.boardSizeMax))
+                self.ex = choice(range(self.x))
+                self.ey = choice(range(self.y))
             self.grid["exit"] = [self.ex, self.ey]        
         
         if self.random =="no":
@@ -122,8 +122,8 @@ class Grid():
             self.b = 1
             self.bomb_count = choice(range(self.bomb_count_min, self.bomb_count_max))
             while self.b < self.bomb_count:
-                self.bx = choice(range(self.boardSizeMax)) 
-                self.by = choice(range(self.boardSizeMax))
+                self.bx = choice(range(self.x)) 
+                self.by = choice(range(self.y))
                 self.grid["bombs"].append([self.bx, self.by])
                 self.b += 1
                 
@@ -251,6 +251,7 @@ def game():
             
         # Add the bombs    
         a_grid.add_bombs()
+        a_grid.get_bombs()
         
         # Set the start
         a_grid.set_start()
@@ -258,6 +259,7 @@ def game():
                 
         # Set the exit
         a_grid.set_exit()
+        a_grid.get_exit()
     
         # Instantiate Turtle
         a_turtle = Turtle(a_grid)
