@@ -121,11 +121,15 @@ class Grid():
         if self.random == "yes":
             self.b = 1
             self.bomb_count = choice(range(self.bomb_count_min, self.bomb_count_max))
-            while self.b < self.bomb_count:
+            while (self.b < self.bomb_count): 
                 self.bx = choice(range(self.x)) 
                 self.by = choice(range(self.y))
-                self.grid["bombs"].append([self.bx, self.by])
-                self.b += 1
+                
+                if ([self.bx, self.by] in self.grid["bombs"]) or ([self.bx, self.by] in self.grid["start"]) or ([self.bx, self.by] in self.grid["exit"]):
+                    continue
+                else:
+                    self.grid["bombs"].append([self.bx, self.by])
+                    self.b += 1
                 
         # if not random
         if self.random == "no":
@@ -166,6 +170,7 @@ class Grid():
 class Turtle():
     
     def __init__(self, obj):
+        self.name = input("What's your player name: ")
         self.obj = obj
         self.location = self.obj.grid["start"]
         self.lives = 3
@@ -178,7 +183,7 @@ class Turtle():
     def move(self):
         while self.lives > 0 and self.check_exit() == False:
         
-            self.order = input("Where do you want to go in the board? Options: up, down, left, right ")
+            self.order = input("Where do you want to go in the board " + self.name + "? Options: up, down, left, right ")
 
             if self.order == "up":
                 if self.location[1] + 1 > self.obj.grid["size"][1]:
@@ -214,14 +219,14 @@ class Turtle():
             self.lives -= 1
             self.obj.grid["bombs"].remove(self.location)
             if self.lives == 0:
-                print("YOU HAVE NO MORE LIVES - GAME OVER")
+                print("YOU HAVE NO MORE LIVES " + self.name + " - GAME OVER")
                 return False
         else:
             return True
         
     def check_exit(self):
         if self.location == self.obj.grid["exit"]:
-            print("SUCCESS YOU HAVE EXITED THE MAZE ")
+            print("SUCCESS " + self.name + "YOU HAVE EXITED THE MAZE ")
             print()
             return True
         else:
