@@ -1,5 +1,6 @@
 from random import choice
 import curses
+import time
 
 
 class Grid():
@@ -178,7 +179,7 @@ class Turtle():
         self.lives = 3
     
     
-    def get_location(self, stdscr):
+    def get_location(self):
         print("You are currently at:", self.location)
         
         
@@ -189,14 +190,14 @@ class Turtle():
         curses.cbreak()
         stdscr.keypad(True)
         question = "Where do you want to go " + self.name + "? (USE ARROWS)"
-        stdscr.addstr(0, 0, question)
+        stdscr.clear()
 
         while self.lives > 0 and self.check_exit(stdscr) == False:
-            
-            # Below for regular python without using "curses"
-            # self.order = input("Where do you want to go in the board " + self.name + "? USE ARROWS")
+            stdscr.addstr(0, 0, question)
 
             char = stdscr.getch()
+
+            stdscr.clear()
 
             if char == ord('q'):
                 break
@@ -204,13 +205,15 @@ class Turtle():
             elif char == curses.KEY_UP:
                 if self.location[1] + 1 > self.obj.grid["size"][1]:
                     stdscr.addstr(0, len(question) + 2, "Can not go up any more, you have reached the top of the board")
+                    stdscr.addstr(1,0, "You are at " + str(self.location))
                 else:
                     self.location[1] += 1
                     stdscr.addstr(1,0, "You are at " + str(self.location))
             
             elif char == curses.KEY_DOWN:
                 if self.location[1] -1 < 0:
-                    stdscr.addstr(0, len (question) + 2, "Can not go down any more, you have reached the bottom of the board")
+                    stdscr.addstr(0, len(question) + 2, "Can not go down any more, you have reached the bottom of the board")
+                    stdscr.addstr(1,0, "You are at " + str(self.location))
                 else:
                     self.location[1] -= 1
                     stdscr.addstr(1,0, "You are at " + str(self.location))
@@ -218,6 +221,7 @@ class Turtle():
             elif char == curses.KEY_RIGHT:
                 if self.location[0] + 1 > self.obj.grid["size"][0]:
                     stdscr.addstr(0, len(question) + 2, "Can not go right any more, you have reached the end of the board")
+                    stdscr.addstr(1,0, "You are at " + str(self.location))
                 else:
                     self.location[0] += 1
                     stdscr.addstr(1,0, "You are at " + str(self.location))
@@ -225,33 +229,31 @@ class Turtle():
             elif char == curses.KEY_LEFT:
                 if self.location[0] - 1 < 0:
                     stdscr.addstr(0, len(question) + 2,"Can not go left any more, you have reached the beggining of the board")
+                    stdscr.addstr(1,0, "You are at " + str(self.location))
                 else:
                     self.location[0] -= 1
                     stdscr.addstr(1,0, "You are at " + str(self.location))
 
-            self.check_bombs(stdscr)
-            
-            self.get_location(stdscr)
-
             stdscr.refresh()
-            
-
+            self.check_bombs(stdscr)
+        
         curses.nocbreak()
         stdscr.keypad(0)
         curses.echo()
         curses.endwin()
             
             
-
-        
             
     def check_bombs(self, stdscr):
         if self.location in self.obj.grid["bombs"]:
             stdscr.addstr(1, 0, "YOU HAVE EXPLODED")
+            stdscr.addstr(2, 0, "YOU NOW HAVE " + str(self.lives -1) + " LIVES")
             self.lives -= 1
             self.obj.grid["bombs"].remove(self.location)
             if self.lives == 0:
                 stdscr.addstr(1, 0, "YOU HAVE NO MORE LIVES " + self.name + " - GAME OVER")
+                stdscr.refresh()
+                time.sleep(1.5)
                 return False
         else:
             return True
@@ -259,6 +261,8 @@ class Turtle():
     def check_exit(self, stdscr):
         if self.location == self.obj.grid["exit"]:
             stdscr.addstr(1, 0, "SUCCESS " + self.name.upper() + " YOU HAVE EXITED THE MAZE ")
+            stdscr.refresh()
+            time.sleep(1.5)
             print()
             return True
         else:
