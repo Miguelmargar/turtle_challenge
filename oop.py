@@ -185,6 +185,7 @@ class Turtle():
         
     def move(self):
 
+        # open curses functionality
         stdscr = curses.initscr()
         curses.noecho()
         curses.cbreak()
@@ -192,16 +193,20 @@ class Turtle():
         question = "Where do you want to go " + self.name + "? (USE ARROWS)"
         stdscr.clear()
 
+        # while enough lives and not in the exit location keep moving
         while self.lives > 0 and self.check_exit(stdscr) == False:
             stdscr.addstr(0, 0, question)
 
+            # curses get character from keyboard presses
             char = stdscr.getch()
 
             stdscr.clear()
 
+            #exit to main screen
             if char == ord('q'):
                 break
             
+            #check for up arrow key pressed
             elif char == curses.KEY_UP:
                 if self.location[1] + 1 > self.obj.grid["size"][1]:
                     stdscr.addstr(0, len(question) + 2, "Can not go up any more, you have reached the top of the board")
@@ -209,7 +214,7 @@ class Turtle():
                 else:
                     self.location[1] += 1
                     stdscr.addstr(1,0, "You are at " + str(self.location))
-            
+            # check for down arrow key pressed
             elif char == curses.KEY_DOWN:
                 if self.location[1] -1 < 0:
                     stdscr.addstr(0, len(question) + 2, "Can not go down any more, you have reached the bottom of the board")
@@ -217,7 +222,8 @@ class Turtle():
                 else:
                     self.location[1] -= 1
                     stdscr.addstr(1,0, "You are at " + str(self.location))
-                
+
+            # check for right arrow key pressed    
             elif char == curses.KEY_RIGHT:
                 if self.location[0] + 1 > self.obj.grid["size"][0]:
                     stdscr.addstr(0, len(question) + 2, "Can not go right any more, you have reached the end of the board")
@@ -225,7 +231,8 @@ class Turtle():
                 else:
                     self.location[0] += 1
                     stdscr.addstr(1,0, "You are at " + str(self.location))
-                
+
+            # check for left arrow key pressed
             elif char == curses.KEY_LEFT:
                 if self.location[0] - 1 < 0:
                     stdscr.addstr(0, len(question) + 2,"Can not go left any more, you have reached the beggining of the board")
@@ -235,8 +242,10 @@ class Turtle():
                     stdscr.addstr(1,0, "You are at " + str(self.location))
 
             stdscr.refresh()
+            #check if any bombs in current location
             self.check_bombs(stdscr)
-        
+
+        # close curses functionality
         curses.nocbreak()
         stdscr.keypad(0)
         curses.echo()
