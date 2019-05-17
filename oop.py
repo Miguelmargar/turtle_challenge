@@ -276,6 +276,71 @@ class Turtle_con():
             return False
       
 
+class Turtle_regular():
+    
+    def __init__(self, obj):
+        self.name = input("What's your player name: ").upper()
+        self.obj = obj
+        self.location = self.obj.grid["start"]
+        self.lives = 3
+    
+    
+    def get_location(self):
+        print("You are currently at:", self.location)
+        
+        
+    def move(self):
+        while self.lives > 0 and self.check_exit() == False:
+        
+            self.order = input("Where do you want to go in the board " + self.name + "? Options: up, down, left, right ")
+
+            if self.order == "up":
+                if self.location[1] + 1 > self.obj.grid["size"][1]:
+                    print("Can not go up any more, you have reached the top of the board")
+                else:
+                    self.location[1] += 1
+            
+            if self.order == "down":
+                if self.location[1] -1 < 0:
+                    print("Can not go down any more, you have reached the bottom of the board")
+                else:
+                    self.location[1] -= 1
+                
+            elif self.order == "right":
+                if self.location[0] + 1 > self.obj.grid["size"][0]:
+                    print("Can not go right any more, you have reached the end of the board")
+                else:
+                    self.location[0] += 1
+                
+            elif self.order == "left":
+                if self.location[0] - 1 < 0:
+                    print("Can not go left any more, you have reached the beggining of the board")
+                else:
+                    self.location[0] -= 1
+            
+            self.check_bombs()
+            
+            self.get_location()
+            
+    def check_bombs(self):
+        if self.location in self.obj.grid["bombs"]:
+            print("YOU HAVE EXPLODED")
+            self.lives -= 1
+            self.obj.grid["bombs"].remove(self.location)
+            if self.lives == 0:
+                print("YOU HAVE NO MORE LIVES " + self.name + " - GAME OVER")
+                return False
+        else:
+            return True
+        
+    def check_exit(self):
+        if self.location == self.obj.grid["exit"]:
+            print("SUCCESS " + self.name + "YOU HAVE EXITED THE MAZE ")
+            print()
+            return True
+        else:
+            return False
+
 
 
 def game():
@@ -310,7 +375,7 @@ def game():
         a_grid.get_exit()
     
         # Instantiate Turtle
-        a_turtle = Turtle_con(a_grid)
+        a_turtle = Turtle_regular(a_grid)
         
         a_turtle.move()
         
@@ -322,6 +387,7 @@ def game():
         else:
             print("Good bye!")
             play = False
+            time.sleep(1)
     
 
 game()
