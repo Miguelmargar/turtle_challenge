@@ -206,33 +206,33 @@ class Turtle_con():
             elif char == curses.KEY_UP:
                 if self.location[1] + 1 > self.obj.grid["size"][1]:
                     stdscr.addstr(0, len(question) + 2, "Can not go up any more, you have reached the top of the board")
-                    stdscr.addstr(1,0, "You are at " + str(self.location))
+                    self.get_location(stdscr)
                 else:
                     self.location[1] += 1
-                    stdscr.addstr(1,0, "You are at " + str(self.location))
+                    self.get_location(stdscr)
             # check for down arrow key pressed
             elif char == curses.KEY_DOWN:
                 if self.location[1] -1 < 0:
                     stdscr.addstr(0, len(question) + 2, "Can not go down any more, you have reached the bottom of the board")
-                    stdscr.addstr(1,0, "You are at " + str(self.location))
+                    self.get_location(stdscr)
                 else:
                     self.location[1] -= 1
-                    stdscr.addstr(1,0, "You are at " + str(self.location))
+                    self.get_location(stdscr)
 
             # check for right arrow key pressed    
             elif char == curses.KEY_RIGHT:
                 if self.location[0] + 1 > self.obj.grid["size"][0]:
                     stdscr.addstr(0, len(question) + 2, "Can not go right any more, you have reached the end of the board")
-                    stdscr.addstr(1,0, "You are at " + str(self.location))
+                    self.get_location(stdscr)
                 else:
                     self.location[0] += 1
-                    stdscr.addstr(1,0, "You are at " + str(self.location))
+                    self.get_location(stdscr)
 
             # check for left arrow key pressed
             elif char == curses.KEY_LEFT:
                 if self.location[0] - 1 < 0:
                     stdscr.addstr(0, len(question) + 2,"Can not go left any more, you have reached the beggining of the board")
-                    stdscr.addstr(1,0, "You are at " + str(self.location))
+                    self.get_location(stdscr)
                 else:
                     self.location[0] -= 1
                     self.get_location(stdscr)
@@ -276,7 +276,7 @@ class Turtle_con():
             return False
       
 
-class Turtle_regular():
+class Turtle_reg():
     
     def __init__(self, obj):
         self.name = input("What's your player name: ").upper()
@@ -375,7 +375,7 @@ def game():
         a_grid.get_exit()
     
         # Instantiate Turtle
-        a_turtle = Turtle_regular(a_grid)
+        a_turtle = Turtle_con(a_grid)
         
         a_turtle.move()
         
