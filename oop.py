@@ -170,17 +170,13 @@ class Grid():
 
 
 
-class Turtle():
+class Turtle_con():
     
     def __init__(self, obj):
-        self.name = input("What's your player name: ")
+        self.name = input("What's your player name: ").upper()
         self.obj = obj
         self.location = self.obj.grid["start"]
         self.lives = 3
-    
-    
-    def get_location(self):
-        print("You are currently at:", self.location)
         
         
     def move(self):
@@ -239,7 +235,7 @@ class Turtle():
                     stdscr.addstr(1,0, "You are at " + str(self.location))
                 else:
                     self.location[0] -= 1
-                    stdscr.addstr(1,0, "You are at " + str(self.location))
+                    self.get_location(stdscr)
 
             stdscr.refresh()
             #check if any bombs in current location
@@ -250,8 +246,10 @@ class Turtle():
         stdscr.keypad(0)
         curses.echo()
         curses.endwin()
+
             
-            
+    def get_location(self, stdscr):
+        stdscr.addstr(1,0, "You are currently at: " + str(self.location))        
             
     def check_bombs(self, stdscr):
         if self.location in self.obj.grid["bombs"]:
@@ -312,7 +310,7 @@ def game():
         a_grid.get_exit()
     
         # Instantiate Turtle
-        a_turtle = Turtle(a_grid)
+        a_turtle = Turtle_con(a_grid)
         
         a_turtle.move()
         
