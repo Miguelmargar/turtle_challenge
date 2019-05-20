@@ -1,9 +1,9 @@
 from random import choice
 import curses
 import time
+    
 
-
-class Grid():
+class Grid_reg():
     
     def __init__(self):
         
@@ -20,6 +20,30 @@ class Grid():
         self.boardSizeMax = 0
         self.bomb_count_min = 0
         self.bomb_count_max = 0
+
+    def set_grid(self):
+        # Set randomness
+        self.set_random()
+            
+        # Set game difficulty
+        self.set_difficulty()        
+            
+        # Set the size
+        self.set_size()
+        self.get_size()
+            
+        # Add the bombs    
+        self.add_bombs()
+        self.get_bombs()
+        
+        # Set the start
+        self.set_start()
+        self.get_start()
+                
+        # Set the exit
+        self.set_exit()
+        self.get_exit()
+
         
     def set_difficulty(self):
         if self.random == "yes": 
@@ -100,7 +124,7 @@ class Grid():
             self.ex = choice(range(self.x))
             self.ey = choice(range(self.y))
             # If exit has bomb get a new exit until exit doesn't have a bomb or is not the start
-            while (self.ex, self.ey) in self.grid["bombs"] or (self.ex, self.ey) in self.grid["start"]:
+            while ((self.ex, self.ey) in self.grid["bombs"]) or ((self.ex, self.ey) in self.grid["start"]):
                 self.ex = choice(range(self.x))
                 self.ey = choice(range(self.y))
             self.grid["exit"] = [self.ex, self.ey]        
@@ -350,29 +374,10 @@ def game():
     while play:
         
         # Intantiate grid
-        a_grid = Grid()
-    
-        # Set randomness
-        a_grid.set_random()
-            
-        # Set game difficulty
-        a_grid.set_difficulty()        
-            
-        # Set the size
-        a_grid.set_size()
-        a_grid.get_size()
-            
-        # Add the bombs    
-        a_grid.add_bombs()
-        a_grid.get_bombs()
+        a_grid = Grid_reg()
         
-        # Set the start
-        a_grid.set_start()
-        a_grid.get_start()
-                
-        # Set the exit
-        a_grid.set_exit()
-        a_grid.get_exit()
+        # Set Grid parameters
+        a_grid.set_grid()
     
         # Instantiate Turtle
         a_turtle = Turtle_con(a_grid)
